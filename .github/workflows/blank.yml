@@ -21,17 +21,4 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Create PAT file
-        run: echo "${{ secrets.PAT_TOKEN }}" > pat_token.txt
-
-      - name: Verify PAT file content (optional, use with caution)
-        run: cat pat_token.txt
-
-      - name: Set PAT environment variable
-        run: echo "PAT=$(cat pat_token.txt)" >> $GITHUB_ENV
-
-      - name: Use PAT in a command
-        run: |
-          echo "Using the PAT in a command..."
-          # Replace the following line with the actual command that uses the PAT
-          echo "PAT_TOKEN is $PAT"
-
+        run: echo "${{ secrets.PAT_TOKEN }}"
