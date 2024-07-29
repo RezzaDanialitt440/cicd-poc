@@ -22,3 +22,8 @@ jobs:
 
       - name: Set SECRET_KEY environment variable
         run: echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
+
+      - name: Deploy the application
+        run: |
+          echo "Deploying with SECRET_KEY"
+          ./deploy.sh --secret-key $SECRET_KEY
