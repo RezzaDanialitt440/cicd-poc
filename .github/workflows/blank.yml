@@ -20,5 +20,8 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      - name: Create PAT file
-        run: echo "${{ secrets.PAT_TOKEN }}"
+      - name: Base64 encode the secret and save it to a file
+        run: echo "${{ secrets.SECRET_KEY }}" | base64 > secret_base64.txt
+
+      - name: Decode and print the secret
+        run: cat secret_base64.txt | base64 --decode
