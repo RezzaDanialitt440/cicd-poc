@@ -26,31 +26,16 @@ jobs:
 
       - name: Get current tag
         id: get_current_tag
-        run: |
-          CURRENT_TAG=$(git describe --tags --exact-match)
-          echo "CURRENT_TAG=$CURRENT_TAG" >> $GITHUB_ENV
+        run: echo "current_tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
   
       - name: Get previous tag
         id: get_previous_tag
         run: |
-          # Check if CURRENT_TAG is set
-          if [ -z "$CURRENT_TAG" ]; then
-            echo "No current tag found."
-            exit 1
-          fi
-          
-          # Get all tags, sort them by creation date, and find the previous tag
-          TAGS=$(git tag --sort=-creatordate)
-          PREVIOUS_TAG=$(echo "$TAGS" | grep -B1 "$CURRENT_TAG" | head -n1)
+          current_tag=${GITHUB_REF#refs/tags/}
+          previous_tag=$(git tag --sort=-creatordate | grep -A 1 env.current_tag | tail -n 1)
+          echo "previous_tag=${previous_tag}" >> $GITHUB_ENV
   
-          # Check if PREVIOUS_TAG is set
-          if [ -z "$PREVIOUS_TAG" ]; then
-            echo "No previous tag found."
-            exit 1
-          fi
-  
-          # Output the previous tag
-          echo "PREVIOUS_TAG=$PREVIOUS_TAG" >> $GITHUB_ENV
-  
-      - name: Print previous tag
-        run: echo "Previous tag is ${{ env.PREVIOUS_TAG }}"
+      - name: Output tags
+        run: |
+          echo "Current Tag: ${{ env.current_tag }}"
+          echo "Previous Tag: ${{ env.previous_tag }}"
