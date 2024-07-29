@@ -20,9 +20,18 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      - name: Set SECRET_KEY environment variable
-        run: echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
+      - name: Create PAT file
+        run: echo "${{ secrets.PAT_TOKEN }}" > pat_token.txt
 
-      - name: Deploy the application
+      - name: Verify PAT file content (optional, use with caution)
+        run: cat pat_token.txt
+
+      - name: Set PAT environment variable
+        run: echo "PAT=$(cat pat_token.txt)" >> $GITHUB_ENV
+
+      - name: Use PAT in a command
         run: |
-          echo "Deploying with $SECRET_KEY"
+          echo "Using the PAT in a command..."
+          # Replace the following line with the actual command that uses the PAT
+          echo "PAT_TOKEN is $PAT"
+
