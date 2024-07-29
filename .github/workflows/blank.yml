@@ -42,20 +42,23 @@ jobs:
             echo "Unknown event"
           fi
 
-      - name: Check event type
-        id: check_push_event
+      - name: Check if push is to a branch or a tag
+        id: check_push_type
         run: |
-          echo "Event Name: ${{ github.event_name }}"
-          if [ "${{ github.event_name }}" == "push" ]; then
-            echo "This is a push event"
-            echo "Ref: ${{ github.ref }}"  # Branch or tag reference
-          elif [ "${{ github.event_name }}" == "pull_request" ]; then
-            echo "This is a pull request event"
-            echo "PR Number: ${{ github.event.pull_request.number }}"
-          elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            echo "This is a manual trigger"
+          echo "GitHub Ref: ${{ github.ref }}"
+
+          # Check if the push is to a branch
+          if [[ "${{ github.ref }}" == refs/heads/* ]]; then
+            echo "Push to branch detected"
+            branch_name="${{ github.ref#refs/heads/ }}"
+            echo "Branch Name: $branch_name"
+          # Check if the push is to a tag
+          elif [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            echo "Push to tag detected"
+            tag_name="${{ github.ref#refs/tags/ }}"
+            echo "Tag Name: $tag_name"
           else
-            echo "Unknown event"
+            echo "Unknown ref type"
           fi
 
       - name: List all tags
