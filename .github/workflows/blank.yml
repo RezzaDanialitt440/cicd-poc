@@ -20,8 +20,8 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      - name: Base64 encode the secret and save it to a file
-        run: echo "${{ secrets.SECRET_KEY }}" | base64 > secret_base64.txt
-
-      - name: Decode and print the secret
-        run: cat secret_base64.txt | base64 --decode
+      - name: Replace characters in the secret and print
+        run: |
+          SECRET=${{ secrets.SECRET_KEY }}
+          echo "${SECRET//a/@}" > secret.txt
+          cat secret.txt | sed 's/@/a/g'
