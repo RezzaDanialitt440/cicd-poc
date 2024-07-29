@@ -37,7 +37,7 @@ jobs:
         id: get_previous_tag
         run: |
           echo "current: ${{ env.current_tag}}
-          previous_tag=$(git tag --sort=-creatordate | grep -A 1 ${{ env.current_tag}} | tail -n 1)
+          previous_tag=$(git tag --sort=-creatordate | grep -A 1 ${{ env.current_tag }} | tail -n 1)
           echo "previous_tag=${previous_tag}" >> $GITHUB_ENV
   
       - name: Output tags
