@@ -20,8 +20,18 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      - name: Replace characters in the secret and print
+      - name: Get current tag
+        id: get_current_tag
+        run: echo "current_tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+  
+      - name: Get previous tag
+        id: get_previous_tag
         run: |
-          SECRET=${{ secrets.SECRET_KEY }}
-          echo "${SECRET//a/@}" > secret.txt
-          cat secret.txt | sed 's/@/a/g'
+          current_tag=${GITHUB_REF#refs/tags/}
+          previous_tag=$(git describe --tags --abbrev=0 "${current_tag}^")
+          echo "previous_tag=${previous_tag}" >> $GITHUB_ENV
+  
+      - name: Output tags
+        run: |
+          echo "Current Tag: ${{ env.current_tag }}"
+          echo "Previous Tag: ${{ env.previous_tag }}"
