@@ -80,3 +80,4 @@ jobs:
       - name: Check Diff
         run: |
           dirs=$(git diff --name-only ${{ env.current_tag }} ${{ env.previous_tag }} | cut -d'/' -f1 | sort | uniq)
+          echo "Modified directories: ${dirs}"
